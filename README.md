@@ -32,6 +32,12 @@ The model card contains comprehensive details on model architecture, inputs/outp
 
 ## Installation
 
+### 0. Add the mirror URL for uv-pip
+```bash
+# export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+grep -qxF 'export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple' ~/.bashrc || echo 'export UV_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple' >> ~/.bashrc
+```
+
 ### 1. Install uv (if not already installed)
 
 ```bash
@@ -57,10 +63,12 @@ Then authenticate using the HuggingFace CLI:
 
 ```bash
 # Install huggingface-cli if not already installed (included in transformers)
-pip install huggingface_hub
+# pip install huggingface_hub
+uv add huggingface_hub
 
 # Login with your token
-huggingface-cli login
+# huggingface-cli login
+uv run --active hf auth login
 ```
 
 Get your access token at: https://huggingface.co/settings/tokens
@@ -68,6 +76,24 @@ Get your access token at: https://huggingface.co/settings/tokens
 > 💡 **Tip**: For more details on HuggingFace authentication, see the [official documentation](https://huggingface.co/docs/huggingface_hub/guides/cli).
 
 ## Running Inference
+
+### Set self model directory
+Change the cache directory to your desired location (optional, default is `~/.cache/huggingface`):
+
+```bash
+# mkdir -p ~/fsas/models/huggingface
+# export HF_HOME=~/fsas/models/huggingface
+
+grep -qxF 'export HF_HOME=$HOME/fsas/models/huggingface' ~/.bashrc || echo 'export HF_HOME=$HOME/fsas/models/huggingface' >> ~/.bashrc
+grep -qxF 'mkdir -p "$HF_HOME"' ~/.bashrc || echo 'mkdir -p "$HF_HOME"' >> ~/.bashrc
+```
+
+### Add huggingface mirror URL (optional, can speed up downloads in some regions)
+
+```bash
+# export HF_ENDPOINT=https://hf-mirror.com
+grep -qxF 'export HF_ENDPOINT=https://hf-mirror.com' ~/.bashrc || echo 'export HF_ENDPOINT=https://hf-mirror.com' >> ~/.bashrc
+```
 
 ### Test script
 
