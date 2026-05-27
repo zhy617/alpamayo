@@ -18,6 +18,11 @@
 from typing import Any
 
 import numpy as np
+
+from alpamayo_r1.jetson_compat import patch_typing_self
+
+patch_typing_self()
+
 import physical_ai_av
 import scipy.spatial.transform as spt
 import torch

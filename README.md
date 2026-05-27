@@ -105,8 +105,39 @@ For reference, it takes around 2.5 minutes on a 100 MB/s wired connection.
 python src/alpamayo_r1/test_inference.py
 ```
 
-In case you would like to obtain more trajectories and reasoning traces, please feel free to change
-the `num_traj_samples=1` argument to a higher number (Line 60).
+### Jetson Orin inference
+
+On Jetson Orin, use the SDPA/Jetson compatibility path. This expects a Jetson CUDA
+PyTorch environment at `jetson_venv` and a prepared sample at `.codex/alpamayo_sample.pt`.
+Generate the sample from a Python 3.12 environment if needed; the Jetson inference
+environment can then load the saved sample directly.
+
+```bash
+python src/alpamayo_r1/test_inference.py \
+  --save-sample-path .codex/alpamayo_sample.pt \
+  --prepare-sample-only
+```
+
+```bash
+scripts/run_inference_jetson.sh
+```
+
+Equivalent direct command:
+
+```bash
+PYTHONPATH="$PWD/src" jetson_venv/bin/python src/alpamayo_r1/test_inference.py \
+  --sample-path .codex/alpamayo_sample.pt \
+  --attn-implementation sdpa \
+  --jetson-compat \
+  --low-cpu-mem-usage \
+  --device-map-cuda
+```
+
+This path disables the Transformers CUDA allocator warmup and falls back selected
+Jetson CUDA linalg calls to CPU if the local libcusolver build is missing symbols.
+
+In case you would like to obtain more trajectories and reasoning traces, pass
+`--num-traj-samples` with a higher number.
 
 ### Interactive notebook
 
